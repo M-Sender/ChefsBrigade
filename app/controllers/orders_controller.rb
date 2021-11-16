@@ -47,6 +47,20 @@ class OrdersController < ApplicationController
     end
   end
 
+
+  def match customer_id
+    num_meals =  Customer.find(params[:customer_id])
+    for restaurant in Restaurant.all
+      if restaurant.meals.count >= num_meals
+        #Can add logic to match allergies and such
+        restaurant.meals.count -= num_meals
+        #create order
+        @order = Order.new(order_params)
+        restaurant.save
+        return restaurant.id
+      end
+    end
+
   # DELETE /orders/1 or /orders/1.json
   def destroy
     @order.destroy
